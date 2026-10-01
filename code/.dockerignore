@@ -1,0 +1,6 @@
+venv/
+Dockerfile
+docker-compose.yml
+media/
+.dockerignore
+.gitignore

@@ -1,0 +1,47 @@
+services:
+  database:
+    image: postgres:18.6-alpine
+    container_name: atre_shohada_db
+    restart: always
+    environment:
+      POSTGRES_DB: atre_shohada_db
+      POSTGRES_USER: atre_shohada_user
+      POSTGRES_PASSWORD: "@AtreShohada_1234"
+    volumes:
+      - atre_shohada_data:/var/lib/postgresql
+    ports:
+      - "5532:5432"
+
+  web:
+    build:
+      context: ./code
+      args:
+        USER_ID: ${HOST_UID:-1000}
+        GROUP_ID: ${HOST_GID:-1000}
+
+    image: atre_shohada_backend:1.0.0
+    container_name: atre_shohada_backend
+    command: sh -c "chown -R ${HOST_UID:-1000}:${HOST_GID:-1000} /media /app\
+      && chmod -R 777 /media \
+      && su appuser -c 'sleep 1 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000'"
+    user: root
+    volumes:
+      - ./code:/app
+      - ./media:/media
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    environment:
+      DB_NAME: atre_shohada_db
+      DB_USER: atre_shohada_user
+      DB_PASSWORD: "@AtreShohada_1234"
+      DB_HOST: database
+      DB_PORT: 5432
+      DEBUG: true
+      DJANGO_SECRET_KEY: "django-insecure-7+c9i%yf61j6jvxf&8tg7!fva62x!fdodiw(%b4m5rk_9xp2*v"
+      DATABASE_API_KEY: "7MI7O3Qj.MWiLDPDLOY8uw20tiZZTeqmnoTV79yLm"
+
+volumes:
+  atre_shohada_data:
