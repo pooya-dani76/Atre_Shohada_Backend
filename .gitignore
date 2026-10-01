@@ -4,6 +4,7 @@ code/venv/
 myenv/
 venv/
 .vscode/
+static/
 
 __pycache__/
 *.pyc
