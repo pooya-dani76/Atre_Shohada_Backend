@@ -4,7 +4,7 @@ code/venv/
 myenv/
 venv/
 .vscode/
-static/
+code/static/
 
 __pycache__/
 *.pyc

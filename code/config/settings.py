@@ -181,10 +181,10 @@ CKEDITOR_5_CONFIGS = {
 
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://codneb.ir", 
-    r"^http://codneb.ir",
-    r"^https://app.codneb.ir", 
-    r"^http://app.codneb.ir", 
+    r"^https://atershohada.liara.run", 
+    r"^http://atershohada.liara.run",
+    r"^https://nepheron.ir", 
+    r"^http://nepheron.ir", 
     r"^http://localhost:\d+$",  
     r"^http://127.0.0.1:\d+$",  
 ]
