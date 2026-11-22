@@ -2,39 +2,41 @@ from django.db import models
 from django_jalali.db import models as jmodels
 
 
-class Martyr(models.Model):
-    '''Model representing a Martyr with their information, testament, biography, and narrative.'''
-    class WazeiyateTaahol(models.TextChoices):
+class MarriageStatus(models.TextChoices):
         SINGLE = 'single', 'مجرد'
         MARRIED = 'married', 'متأهل'
 
-    class DispatchType(models.TextChoices):
-        SARBAZ = 'sarbaz', 'سرباز'
-        BASIJI = 'basiji', 'بسیجی'
-        PASDAR = 'pasdar', 'پاسدار'
-        KARMAND = 'karmand', 'کارمند'
-        DAAVTALAB = 'davtalab', 'داوطلب'
-        MARDOMI = 'mardomi', 'مردمی'
-        MARZBAN = 'marzban', 'مرزبان'
-        ROUHANI = 'rouhani', 'روحانی'
-        
-    class GratuationLevel(models.TextChoices):
-        BELOW_DIPLOMA = 'below_diploma', 'زیر دیپلم'
-        DIPLOMA = 'diploma', 'دیپلم'
-        ASSOCIATE = 'associate', 'فوق دیپلم'
-        BACHELOR = 'bachelor', 'لیسانس'
-        MASTER = 'master', 'فوق لیسانس'
-        PHD = 'phd', 'دکترا'  
-        POST_DOCTORAL = 'post_doctoral', 'فوق دکترا'
-        HOZAVI = 'hozavi', 'حوزوی'
+class DispatchType(models.TextChoices):
+    SARBAZ = 'sarbaz', 'سرباز'
+    BASIJI = 'basiji', 'بسیجی'
+    PASDAR = 'pasdar', 'پاسدار'
+    KARMAND = 'karmand', 'کارمند'
+    DAAVTALAB = 'davtalab', 'داوطلب'
+    MARDOMI = 'mardomi', 'مردمی'
+    MARZBAN = 'marzban', 'مرزبان'
+    ROUHANI = 'rouhani', 'روحانی'
+    
+class GraduationLevel(models.TextChoices):
+    BELOW_DIPLOMA = 'below_diploma', 'زیر دیپلم'
+    DIPLOMA = 'diploma', 'دیپلم'
+    ASSOCIATE = 'associate', 'فوق دیپلم'
+    BACHELOR = 'bachelor', 'لیسانس'
+    MASTER = 'master', 'فوق لیسانس'
+    PHD = 'phd', 'دکترا'  
+    POST_DOCTORAL = 'post_doctoral', 'فوق دکترا'
+    HOZAVI = 'hozavi', 'حوزوی'
+
+
+class Martyr(models.Model):
+    '''Model representing a Martyr with their information, testament, biography, and narrative.'''
     
     # Martyr's personal information
     first_name = models.CharField(verbose_name="نام شهید", max_length=255)
     last_name = models.CharField(verbose_name="نام خانوادگی شهید", max_length=255)
     birth_year = models.PositiveSmallIntegerField(verbose_name='سال تولد', null=True, blank=True)
     father_name = models.CharField(verbose_name="نام پدر شهید", max_length=255, null=True, blank=True)
-    graduation = models.CharField(verbose_name="تحصیلات شهید", choices=GratuationLevel.choices, max_length=20, null=True, blank=True)
-    marriage_status = models.CharField(verbose_name="وضعیت تاهل شهید", choices=WazeiyateTaahol.choices, max_length=20, null=True, blank=True)
+    graduation = models.CharField(verbose_name="تحصیلات شهید", choices=GraduationLevel.choices, max_length=20, null=True, blank=True)
+    marriage_status = models.CharField(verbose_name="وضعیت تاهل شهید", choices=MarriageStatus.choices, max_length=20, null=True, blank=True)
     children_count = models.PositiveIntegerField(verbose_name="تعداد فرزندان شهید", null=True, blank=True)
     image = models.ImageField(verbose_name="تصویر شهید", upload_to='martyr_images/', null=True, blank=True)
     cover_image = models.ImageField(verbose_name="تصویر کاوری شهید", upload_to='martyr_cover_images/', null=True, blank=True)
@@ -61,7 +63,6 @@ class Martyr(models.Model):
     testament = models.TextField(verbose_name="وصیت نامه", null=True, blank=True)
     biography = models.TextField(verbose_name="زندگینامه", null=True, blank=True)
     narrative = models.TextField(verbose_name="روایت نامه", null=True, blank=True)
-    pilgrimage_letter = models.TextField(verbose_name="زیارت نامه", null=True, blank=True)
     is_active = models.BooleanField(verbose_name="فعال", default=True)
     created_at = jmodels.jDateTimeField(verbose_name="ایجاد شده در تاریخ", auto_now_add=True)
     updated_at = jmodels.jDateTimeField(verbose_name="به روز شده در تاریخ", auto_now=True)

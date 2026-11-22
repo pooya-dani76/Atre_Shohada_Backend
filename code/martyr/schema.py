@@ -1,38 +1,43 @@
-from drf_spectacular.utils import OpenApiParameter
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes
+from .models import MarriageStatus, GraduationLevel
 
 
-name_search_parameter = OpenApiParameter(
-    name='name',
-    type=str, 
-    location=OpenApiParameter.QUERY, 
-    description="Search Martyrs by name(case-insensitive)", 
-    required=False)
-
-biography_search_parameter = OpenApiParameter(
-    name='biography',
-    type=str, 
-    location=OpenApiParameter.QUERY, 
-    description="Search Martyrs by biography(case-insensitive)", 
-    required=False)
-
-
-narrative_search_parameter = OpenApiParameter(
-    name='narrative',
-    type=str, 
-    location=OpenApiParameter.QUERY, 
-    description="Search Martyrs by narrative(case-insensitive)", 
-    required=False)
-
-testament_search_parameter = OpenApiParameter(
-    name='testament',
-    type=str, 
-    location=OpenApiParameter.QUERY, 
-    description="Search Martyrs by testament(case-insensitive)", 
-    required=False)
-
-pilgrimage_letter_search_parameter = OpenApiParameter(
-    name='pilgrimage_letter',
-    type=str,
-    location=OpenApiParameter.QUERY, 
-    description="Search Martyrs by pilgrimage letter(case-insensitive)", 
-    required=False)
+martyr_list_parameters = [
+    OpenApiParameter(
+        name="name",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Search by first name or last name",
+        required=False,
+    ),
+    OpenApiParameter(
+        name="dispatch",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Filter by dispatch type",
+        required=False,
+    ),
+    OpenApiParameter(
+        name="martyrdom",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Filter by martyrdom location",
+        required=False,
+    ),
+    OpenApiParameter(
+        name="graduation",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Filter by education level",
+        required=False,
+        enum=GraduationLevel.values,
+    ),
+    OpenApiParameter(
+        name="married",
+        type=OpenApiTypes.BOOL,
+        location=OpenApiParameter.QUERY,
+        description="Filter by marriage status (true for married, false for single)",
+        required=False,
+        enum=[True, False]
+    ),
+]

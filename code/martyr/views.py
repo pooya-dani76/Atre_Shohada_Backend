@@ -5,17 +5,11 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from .serializers import MartyrListSerializer, MartyrResponseSerializer
-from .models import Martyr   
+from .models import Martyr, MarriageStatus
 from .paginations import MartyrPagination
 from utils.response_schema import BaseErrorResponseSerializer
 from django.db.models import Q
-from .schema import (
-    name_search_parameter,
-    biography_search_parameter,
-    narrative_search_parameter,
-    testament_search_parameter,
-    pilgrimage_letter_search_parameter,
-)
+from .schema import martyr_list_parameters
 
 
 class MartyrView(APIView):
@@ -42,35 +36,41 @@ class MartyrListView(APIView):
             403: BaseErrorResponseSerializer,
             200: MartyrPagination.get_paginated_response_serializer(serializer=MartyrListSerializer),
         },
-        parameters=[
-            name_search_parameter,
-            biography_search_parameter,
-            narrative_search_parameter,
-            testament_search_parameter,
-            pilgrimage_letter_search_parameter,
-        ]
+        parameters=martyr_list_parameters
     )
     def get(self, request: Request):
         name = request.query_params.get('name', None)
-        testament = request.query_params.get('testament', None)
-        biography = request.query_params.get('biography', None)
-        narrative = request.query_params.get('narrative', None)
-        pilgrimage_letter = request.query_params.get('pilgrimage_letter', None)
+        dispatch = request.query_params.get('dispatch', None)
+        martyrdom = request.query_params.get('martyrdom', None)
+        graduation = request.query_params.get('graduation', None)
+        married = request.query_params.get('married', None)
         
+        if married is not None:
+            if married.lower() == 'true':
+                married = True
+            elif married.lower() == 'false':
+                married = False
+            else:
+                married = None    
         martyrs = Martyr.objects.all()
         if name:
             martyrs = martyrs.filter(Q(first_name__icontains=name) | Q(last_name__icontains=name))
-        if testament:
-            martyrs = martyrs.filter(testament__icontains=testament)
-        if biography:
-            martyrs = martyrs.filter(biography__icontains=biography)
-        if narrative:
-            martyrs = martyrs.filter(narrative__icontains=narrative)
-        if pilgrimage_letter:
-            martyrs = martyrs.filter(pilgrimage_letter__icontains=pilgrimage_letter)
+            
+        if married is not None:
+            if married:
+                martyrs = martyrs.filter(marriage_status=MarriageStatus.MARRIED)
+            else:
+                martyrs = martyrs.filter(marriage_status=MarriageStatus.SINGLE)
+            
+        if dispatch:
+            martyrs = martyrs.filter(dispatch_type__icontains=dispatch)
+        if martyrdom:
+            martyrs = martyrs.filter(martyrdom_location__icontains=martyrdom)
+        if graduation:
+            martyrs = martyrs.filter(graduation=graduation)
             
         paginator = MartyrPagination()
         paginated_martyrs = paginator.paginate_queryset(martyrs, request)
         
         serializer = MartyrListSerializer(paginated_martyrs, many=True, context={'request': request})
-        return paginator.get_paginated_response(serializer.data)    
+        return paginator.get_paginated_response(serializer.data)       
