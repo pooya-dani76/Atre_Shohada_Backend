@@ -1,5 +1,5 @@
 from drf_spectacular.utils import OpenApiParameter, OpenApiTypes
-from .models import MarriageStatus, GraduationLevel
+from .models import GraduationLevel, DispatchType
 
 
 martyr_list_parameters = [
@@ -16,6 +16,7 @@ martyr_list_parameters = [
         location=OpenApiParameter.QUERY,
         description="Filter by dispatch type",
         required=False,
+        enum=DispatchType.values
     ),
     OpenApiParameter(
         name="martyrdom",

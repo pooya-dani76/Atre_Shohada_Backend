@@ -23,11 +23,11 @@ class SliderSetting(models.Model):
 
 class Slider(models.Model):
     title = models.CharField("Title", max_length=100)
-    image = models.ImageField(verbose_name="Slider image", upload_to="slider_images/", null=True, blank=True)
-    image_alt = models.CharField(verbose_name="Image Alt", max_length=50, null=True, blank=True)
-    published = models.BooleanField(verbose_name="Published", default=False)
-    created_at = jmodels.jDateTimeField(verbose_name="Created At", auto_now=False, auto_now_add=True)
-    updated_at = jmodels.jDateTimeField(verbose_name="Updated At", auto_now=True, auto_now_add=False)
+    image = models.ImageField(verbose_name="عکس اسلایدر", upload_to="slider_images/", null=True, blank=True)
+    image_alt = models.CharField(verbose_name="Alt عکس", max_length=50, null=True, blank=True)
+    published = models.BooleanField(verbose_name="انتشار", default=False)
+    created_at = jmodels.jDateTimeField(verbose_name="ایجاد شده", auto_now=False, auto_now_add=True)
+    updated_at = jmodels.jDateTimeField(verbose_name="به روز رسانی شده", auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'Slider'

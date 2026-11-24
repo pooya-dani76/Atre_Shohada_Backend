@@ -38,7 +38,7 @@ class MartyrAdminForm(forms.ModelForm):
 class MartyrAdmin(admin.ModelAdmin):
     form = MartyrAdminForm
     inlines = [GalleryInline]
-    search_fields = ['name']
+    search_fields = ['first_name', 'last_name']
     list_per_page = 25
     list_display = [
         "full_name",

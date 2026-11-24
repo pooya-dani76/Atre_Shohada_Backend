@@ -15,6 +15,7 @@ class DispatchType(models.TextChoices):
     MARDOMI = 'mardomi', 'مردمی'
     MARZBAN = 'marzban', 'مرزبان'
     ROUHANI = 'rouhani', 'روحانی'
+    ARTESHI = 'arteshi', 'ارتشی'
     
 class GraduationLevel(models.TextChoices):
     BELOW_DIPLOMA = 'below_diploma', 'زیر دیپلم'
@@ -76,3 +77,4 @@ class Martyr(models.Model):
         verbose_name_plural = 'شهدا'
         db_table = "Martyr"
         ordering = ['-created_at']       
+        unique_together = ('first_name', 'last_name')
