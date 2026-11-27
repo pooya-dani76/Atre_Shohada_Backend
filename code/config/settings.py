@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'contact_us',
     'slider',
     'social',
+    'custom_commands',
     # 'blog',
     # external
     'rest_framework',

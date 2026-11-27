@@ -2,11 +2,12 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, C
 from .models import Martyr
 from gallery.serializers import GallerySerializer
 from utils.response_schema import BaseSafeImageSerializer, BaseResponseSerializer
+from utils.abstracts import OptimizedImageModelSerializer
 from drf_spectacular.utils import extend_schema_field
 
 
 
-class MartyrSerializer(BaseSafeImageSerializer):
+class MartyrSerializer(BaseSafeImageSerializer, OptimizedImageModelSerializer):
     '''Serializer for the Martyr model, excluding the 'is_active' field and making 'id', 'created_at', and 'updated_at' read-only'''
     all_images = SerializerMethodField()
     

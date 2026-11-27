@@ -1,9 +1,7 @@
 from django.db import models
 from django_jalali.db import models as jmodels
-from io import BytesIO
-from PIL import Image, ImageOps
-from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
+from utils.abstracts import OptimizedImageModel
 
 
 class SliderSetting(models.Model):
@@ -21,7 +19,7 @@ class SliderSetting(models.Model):
         return "تنظیمات اسلایدر"
 
 
-class Slider(models.Model):
+class Slider(OptimizedImageModel):
     title = models.CharField("Title", max_length=100)
     image = models.ImageField(verbose_name="عکس اسلایدر", upload_to="slider_images/", null=True, blank=True)
     image_alt = models.CharField(verbose_name="Alt عکس", max_length=50, null=True, blank=True)
@@ -40,35 +38,6 @@ class Slider(models.Model):
     
     
     def save(self, *args, **kwargs):
-        # if self.image:
-        #     image = Image.open(self.image)
-
-        #     target_size = (1920, 600)
-
-        #     image = ImageOps.fit(
-        #         image,
-        #         target_size,
-        #         method=Image.Resampling.LANCZOS,
-        #         centering=(0.5, 0.5),
-        #     )
-
-        #     if image.mode != "RGB":
-        #         image = image.convert("RGB")
-
-        #     output = BytesIO()
-
-        #     image.save(
-        #         output,
-        #         format="JPEG",
-        #         quality=90,
-        #         optimize=True,
-        #     )
-
-        #     self.image = ContentFile(
-        #         output.getvalue(),
-        #         name=f"{self.image.name.rsplit('.', 1)[0]}.jpg",
-        #     )
-        
         if self.published:
             setting = SliderSetting.objects.first()
 

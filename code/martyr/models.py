@@ -1,5 +1,10 @@
 from django.db import models
 from django_jalali.db import models as jmodels
+from io import BytesIO
+from PIL import Image, ImageOps
+from django.core.files.base import ContentFile
+from utils.abstracts import OptimizedImageModel
+
 
 
 class MarriageStatus(models.TextChoices):
@@ -28,7 +33,7 @@ class GraduationLevel(models.TextChoices):
     HOZAVI = 'hozavi', 'حوزوی'
 
 
-class Martyr(models.Model):
+class Martyr(OptimizedImageModel):
     '''Model representing a Martyr with their information, testament, biography, and narrative.'''
     
     # Martyr's personal information
@@ -42,6 +47,7 @@ class Martyr(models.Model):
     image = models.ImageField(verbose_name="تصویر شهید", upload_to='martyr_images/', null=True, blank=True)
     cover_image = models.ImageField(verbose_name="تصویر کاوری شهید", upload_to='martyr_cover_images/', null=True, blank=True)
     identity_image = models.ImageField(verbose_name="تصویر شناسنامه شهید", upload_to='martyr_identity_images/', null=True, blank=True)
+    # identity_image_optimized = models.ImageField(upload_to="martyr_identity_images/optimized/", blank=True, null=True, editable=False)
     
     # Martyr's dispatch information
     dispatch_type = models.CharField(verbose_name='نوع اعزام', max_length=20, choices=DispatchType.choices, null=True, blank=True)
@@ -70,7 +76,7 @@ class Martyr(models.Model):
 
     def __str__(self):
         '''Return the name of the Martyr for display purposes.'''
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"  
     
     class Meta:
         verbose_name = 'شهید'

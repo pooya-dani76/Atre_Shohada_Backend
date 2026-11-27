@@ -1,7 +1,8 @@
 from .models import Slider
 from utils.response_schema import BaseSafeImageSerializer, BaseResponseSerializer
+from utils.abstracts import OptimizedImageModelSerializer
 
-class SliderSerializer(BaseSafeImageSerializer):
+class SliderSerializer(BaseSafeImageSerializer, OptimizedImageModelSerializer):
     '''Serializer for the Slider model, excluding the 'published' field and making 'id', 'created_at', and 'updated_at' read-only'''
     
     class Meta:

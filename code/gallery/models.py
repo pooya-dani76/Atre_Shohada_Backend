@@ -1,8 +1,9 @@
 from django.db import models
 from martyr.models import Martyr
 from django_jalali.db import models as jmodels
+from utils.abstracts import OptimizedImageModel
 
-class Gallery(models.Model):
+class Gallery(OptimizedImageModel):
     '''Model representing a Gallery with its name, description, and image.'''
     
     martyr = models.ForeignKey(Martyr, verbose_name="شهید", on_delete=models.CASCADE, related_name='gallery')
