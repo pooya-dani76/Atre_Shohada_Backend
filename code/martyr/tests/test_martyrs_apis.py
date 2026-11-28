@@ -72,7 +72,7 @@ class MartyrsAPITestCase(APITestCase):
             martyr=self.martyr,
             description="Inactive Test Gallery Image",
             image=get_temp_image(name="test_martyr_gallery_2.png"),
-            is_active=False,
+            is_published=False,
         )
         self.detail_url = reverse('martyr-detail', kwargs={'id': self.martyr.id})
         self.list_url = reverse('martyr-list')
@@ -131,7 +131,7 @@ class MartyrsAPITestCase(APITestCase):
         response = self.client.get(self.detail_url)
         data = response.data['data']
         self.assertIn('all_images', data)
-        self.assertNotIn('is_active', data)
+        self.assertNotIn('is_published', data)
         self.assertNotIn('created_at', data)
         self.assertNotIn('updated_at', data)
 
@@ -158,7 +158,7 @@ class MartyrsAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_inactive_martyrs_not_found(self):
-        self.martyr.is_active = False
+        self.martyr.is_published = False
         self.martyr.save()
         response = self.client.get(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -220,7 +220,7 @@ class MartyrsAPITestCase(APITestCase):
         self.assertEqual(response.data['data'], [])
 
     def test_get_martyrs_list_includes_inactive_martyrs(self):
-        self.martyr.is_active = False
+        self.martyr.is_published = False
         self.martyr.save()
         response = self.client.get(self.list_url)
         self.assertEqual(response.data['count'], 1)
@@ -276,8 +276,8 @@ class MartyrsAPITestCase(APITestCase):
     def test_model_string_representation(self):
         self.assertEqual(str(self.martyr), "Test Martyr Test Martyr Last Name")
 
-    def test_martyr_is_active_by_default(self):
-        self.assertTrue(self.martyr.is_active)
+    def test_martyr_is_published_by_default(self):
+        self.assertTrue(self.martyr.is_published)
 
     def test_martyr_meta_configuration(self):
         self.assertEqual(Martyr._meta.db_table, 'Martyr')
@@ -304,16 +304,16 @@ class MartyrAdminTestCase(TestCase):
         self.assertEqual(self.martyr_admin.search_fields, ['name'])
         self.assertEqual(self.martyr_admin.list_per_page, 25)
         self.assertEqual(self.martyr_admin.ordering, ['-created_at'])
-        self.assertEqual(self.martyr_admin.list_display, ["first_name", "last_name", "is_active"])
+        self.assertEqual(self.martyr_admin.list_display, ["first_name", "last_name", "is_published"])
         self.assertEqual(self.martyr_admin.readonly_fields, ("created_at", "updated_at"))
-        self.assertEqual(self.martyr_admin.list_editable, ("is_active",))
+        self.assertEqual(self.martyr_admin.list_editable, ("is_published",))
         self.assertEqual(self.martyr_admin.inlines, [GalleryInline])
 
     def test_gallery_inline_configuration(self):
         self.assertEqual(self.gallery_inline.model, Gallery)
         self.assertEqual(self.gallery_inline.extra, 1)
         self.assertTrue(self.gallery_inline.show_change_link)
-        self.assertEqual(self.gallery_inline.fields, ['image', 'image_preview', 'description', 'is_active'])
+        self.assertEqual(self.gallery_inline.fields, ['image', 'image_preview', 'description', 'is_published'])
         self.assertEqual(self.gallery_inline.readonly_fields, ['image_preview'])
 
     def test_gallery_inline_image_preview_without_image(self):

@@ -1,13 +1,12 @@
 from .models import Slider
 from utils.response_schema import BaseSafeImageSerializer, BaseResponseSerializer
-from utils.abstracts import OptimizedImageModelSerializer
 
-class SliderSerializer(BaseSafeImageSerializer, OptimizedImageModelSerializer):
+class SliderSerializer(BaseSafeImageSerializer):
     '''Serializer for the Slider model, excluding the 'published' field and making 'id', 'created_at', and 'updated_at' read-only'''
     
     class Meta:
         model = Slider
-        exclude = ['published', 'created_at', 'updated_at']
+        exclude = ['is_published', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
         
         

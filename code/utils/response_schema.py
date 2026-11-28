@@ -1,15 +1,23 @@
 from rest_framework import serializers
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from drf_spectacular.utils import inline_serializer
-import os
+from drf_spectacular.utils import inline_serializer, OpenApiParameter, OpenApiTypes
+from django.db import models
+
+
+# Pagination parameters (used in list views)
+pagination_parameters = [
+    OpenApiParameter(
+        name="page",
+        type=OpenApiTypes.INT,
+        location=OpenApiParameter.QUERY,
+        description="Page number"
+    )
+]
 
 
 
-class BaseResponseSerializer(serializers.Serializer):
-    message = serializers.CharField()
-    data = serializers.JSONField(allow_null=True)
-    
+api_key_parameter = OpenApiParameter(name='X-Api-Key', location=OpenApiParameter.HEADER, required=True, type=str)    
 
 
 class BasePaginator(PageNumberPagination):
@@ -41,7 +49,15 @@ class BasePaginator(PageNumberPagination):
         )    
 
 
-
+class BaseResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    data = serializers.JSONField(
+        required=False,
+        allow_null=True,
+        default=None
+    )
+    
+    
 class BaseSafeImageSerializer(serializers.ModelSerializer):
     pass
     # def to_representation(self, instance):
@@ -73,9 +89,9 @@ class BaseSafeImageSerializer(serializers.ModelSerializer):
     #                         data[field_name] = None
 
     #     return data
-    
 
 
 
-class BaseErrorResponseSerializer(serializers.Serializer):
+class ErrorResponseSerializer(serializers.Serializer):
     message = serializers.JSONField(allow_null=True, default=None)
+    

@@ -49,8 +49,9 @@ INSTALLED_APPS = [
     'contact_us',
     'slider',
     'social',
-    'custom_commands',
-    # 'blog',
+    'blog',
+    'core.apps.CoreConfig',
+    'websites',
     # external
     'rest_framework',
     'corsheaders',
@@ -171,15 +172,6 @@ JALALI_SETTINGS = {
     },
 }
 
-CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"  
-
-CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                    'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
-    },
-}
-
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://atershohada.liara.run", 
@@ -249,74 +241,243 @@ customColorPalette = [
     ]
 
 CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
-CKEDITOR_5_FILE_STORAGE = "path_to_storage.CustomStorage" # optional
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"  
 CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': {
-            'language': 'fa',
-            'items': ['heading', '|', 'bold', 'italic', 'link',
-                      'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
-                    }
+    "default": {
+        "toolbar": {
+            "items": [
+                "undo",
+                "redo",
+                "|",
 
-    },
-    'extends': {
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote',
-        ],
-        'toolbar': {
-            'items': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                      'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing', 'insertImage',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable',
-                    ],
-            'shouldNotGroupWhenFull': 'true'
-        },
-        'image': {
-            'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
-            'styles': [
-                'full',
-                'side',
-                'alignLeft',
-                'alignRight',
-                'alignCenter',
-            ]
+                "heading",
 
+                "|",
+
+                "bold",
+                "italic",
+                "underline",
+                "strikethrough",
+                "subscript",
+                "superscript",
+                "code",
+
+                "|",
+
+                "fontSize",
+                "fontFamily",
+                "fontColor",
+                "fontBackgroundColor",
+
+                "|",
+
+                "alignment",
+
+                "|",
+
+                "link",
+                "insertImage",
+                "mediaEmbed",
+
+                "|",
+
+                "bulletedList",
+                "numberedList",
+                "todoList",
+
+                "|",
+
+                "outdent",
+                "indent",
+
+                "|",
+
+                "insertTable",
+
+                "blockQuote",
+                "codeBlock",
+
+                "|",
+
+                "horizontalLine",
+                "specialCharacters",
+
+                "|",
+
+                "removeFormat",
+            ],
+
+            "shouldNotGroupWhenFull": True,
         },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
+
+        "image": {
+            "toolbar": [
+                "imageTextAlternative",
+                "toggleImageCaption",
+                "|",
+                "imageStyle:inline",
+                "imageStyle:block",
+                "imageStyle:side",
+                "|",
+                "resizeImage",
+            ],
+
+            "styles": [
+                "full",
+                "side",
+                "alignLeft",
+                "alignCenter",
+                "alignRight",
+            ],
+        },
+
+        "table": {
+            "contentToolbar": [
+                "tableColumn",
+                "tableRow",
+                "mergeTableCells",
+            ],
+        },
+
+        "heading": {
+            "options": [
+                {
+                    "model": "paragraph",
+                    "title": "Paragraph",
+                    "class": "ck-heading_paragraph",
+                },
+                {
+                    "model": "heading1",
+                    "view": "h1",
+                    "title": "Heading 1",
+                    "class": "ck-heading_heading1",
+                },
+                {
+                    "model": "heading2",
+                    "view": "h2",
+                    "title": "Heading 2",
+                    "class": "ck-heading_heading2",
+                },
+                {
+                    "model": "heading3",
+                    "view": "h3",
+                    "title": "Heading 3",
+                    "class": "ck-heading_heading3",
+                },
+                {
+                    "model": "heading4",
+                    "view": "h4",
+                    "title": "Heading 4",
+                    "class": "ck-heading_heading4",
+                },
+            ],
+        },
+
+        "fontSize": {
+            "options": [
+                "tiny",
+                "small",
+                "default",
+                "big",
+                "huge",
+            ],
+        },
+
+        "fontFamily": {
+            "options": [
+                "default",
+                "Arial",
+                "Tahoma",
+                "Verdana",
+                "Times New Roman",
+            ],
+        },
+
+        "fontColor": {
+            "colors": [
+                {
+                    "color": "#000000",
+                    "label": "Black",
+                },
+                {
+                    "color": "#FFFFFF",
+                    "label": "White",
+                },
+                {
+                    "color": "#FF0000",
+                    "label": "Red",
+                },
+                {
+                    "color": "#00AA00",
+                    "label": "Green",
+                },
+                {
+                    "color": "#0000FF",
+                    "label": "Blue",
+                },
+                {
+                    "color": "#FFA500",
+                    "label": "Orange",
+                },
+                {
+                    "color": "#800080",
+                    "label": "Purple",
+                },
+            ],
+        },
+
+        "fontBackgroundColor": {
+            "colors": [
+                {
+                    "color": "#FFFF00",
+                    "label": "Yellow",
+                },
+                {
+                    "color": "#00FFFF",
+                    "label": "Cyan",
+                },
+                {
+                    "color": "#FFB6C1",
+                    "label": "Pink",
+                },
+                {
+                    "color": "#D3D3D3",
+                    "label": "Light Gray",
+                },
+            ],
+        },
+
+        "link": {
+            "addTargetToExternalLinks": True,
+            "defaultProtocol": "https://",
+            "decorators": {
+                "openInNewTab": {
+                    "mode": "manual",
+                    "label": "Open in a new tab",
+                    "attributes": {
+                        "target": "_blank",
+                        "rel": "noopener noreferrer",
+                    },
+                },
             },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            }
         },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
-            ]
-        }
+
+        "mediaEmbed": {
+            "previewsInData": True,
+        },
+        "alignment": {
+            "options": [
+                "right",
+                "center",
+                "left",
+                "justify",
+            ],
+        },
+
+        "language": "fa",
     },
-    'list': {
-        'properties': {
-            'styles': 'true',
-            'startIndex': 'true',
-            'reversed': 'true',
-        }
-    }
 }
+
 
 # Define a constant in settings.py to specify file upload permissions
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"

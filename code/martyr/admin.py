@@ -10,7 +10,7 @@ class GalleryInline(admin.TabularInline):
     model = Gallery
     extra = 1
     show_change_link = True
-    fields = ['image', 'image_preview', 'description', 'is_active']
+    fields = ['image', 'image_preview', 'description', 'is_published']
     readonly_fields = ['image_preview']
     
     def image_preview(self, obj):
@@ -42,11 +42,11 @@ class MartyrAdmin(admin.ModelAdmin):
     list_per_page = 25
     list_display = [
         "full_name",
-        "is_active",
+        "is_published",
     ]
     ordering = ['-created_at']
     readonly_fields = ("created_at","updated_at")
-    list_editable= ("is_active",)
+    list_editable= ("is_published",)
     
     @admin.display(description="نام و نام خانوادگی")
     def full_name(self, obj):

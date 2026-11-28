@@ -1,17 +1,15 @@
 from django.db import models
 from martyr.models import Martyr
-from django_jalali.db import models as jmodels
-from utils.abstracts import OptimizedImageModel
+from utils.abstracts import WebPImageModel
+from utils.abstracts import Publishable, TimeStamped
 
-class Gallery(OptimizedImageModel):
+
+class Gallery(WebPImageModel, Publishable, TimeStamped):
     '''Model representing a Gallery with its name, description, and image.'''
     
     martyr = models.ForeignKey(Martyr, verbose_name="شهید", on_delete=models.CASCADE, related_name='gallery')
     description = models.TextField(verbose_name="توضیحات", null=True, blank=True)
     image = models.ImageField(verbose_name="عکس", upload_to='gallery_images/')
-    is_active = models.BooleanField(verbose_name="فعال", default=True)
-    created_at = jmodels.jDateTimeField(verbose_name="ایجاد شده", auto_now_add=True)
-    updated_at = jmodels.jDateTimeField(verbose_name="به روز رسانی شده", auto_now=True)
 
     def __str__(self):
         return f"Image for {self.martyr.first_name} {self.martyr.last_name}"

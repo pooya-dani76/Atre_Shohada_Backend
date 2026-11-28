@@ -2,9 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
-from utils.response_schema import BaseErrorResponseSerializer
+from utils.response_schema import ErrorResponseSerializer
 from drf_spectacular.utils import extend_schema
 from .serializers import ContactUsSerializer, ContactUsResponseSerializer
+from utils.response_schema import api_key_parameter
 
 
 class ContactUsView(APIView):
@@ -14,9 +15,11 @@ class ContactUsView(APIView):
         request=ContactUsSerializer,
         responses={
             201: ContactUsResponseSerializer,
-            400: BaseErrorResponseSerializer,
-            403: BaseErrorResponseSerializer
+            400: ErrorResponseSerializer,
+            403: ErrorResponseSerializer
         },
+        parameters=[api_key_parameter],
+        tags=["Contact US"]
     )
     def post(self, request: Request):
         serializer = ContactUsSerializer(data=request.data)
@@ -24,9 +27,8 @@ class ContactUsView(APIView):
             serializer.save()
             response_serializer = ContactUsResponseSerializer({
                 "message": "Your Message Submited Successfully",
-                "data": serializer.data
             })
             return Response(response_serializer.data, status=status.HTTP_201_CREATED)
         
-        error_serializer = BaseErrorResponseSerializer({"message": serializer.errors})
+        error_serializer = ErrorResponseSerializer({"message": serializer.errors})
         return Response(error_serializer.data, status=status.HTTP_400_BAD_REQUEST)

@@ -10,4 +10,8 @@ class ContactUsSerializer(ModelSerializer):
         
 
 class ContactUsResponseSerializer(BaseResponseSerializer):
-    data = ContactUsSerializer()
+    
+    def get_fields(self):
+        fields = super().get_fields()
+        fields.pop('data', None)
+        return fields

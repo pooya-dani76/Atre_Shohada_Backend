@@ -44,7 +44,7 @@ class GalleryAPITestCase(APITestCase):
                 martyr=martyr,
                 description=f"Test Gallery Image {i+1}",
                 image=get_temp_image(),
-                is_active=True
+                is_published=True
             )
         self.list_url = reverse('gallery-list')
 
@@ -72,7 +72,7 @@ class GalleryAPITestCase(APITestCase):
 
 
     def test_get_gallery_list_with_inactive_martyr(self):
-        self.martyr_1.is_active = False
+        self.martyr_1.is_published = False
         self.martyr_1.save()
         response = self.client.get(self.list_url, {'martyr': self.martyr_1.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -82,7 +82,7 @@ class GalleryAPITestCase(APITestCase):
 
     def test_get_gallery_list_with_inactive_gallery(self):
         gallery_item = Gallery.objects.filter(martyr=self.martyr_1).first()
-        gallery_item.is_active = False
+        gallery_item.is_published = False
         gallery_item.save()
         response = self.client.get(self.list_url, {'martyr': self.martyr_1.id})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -102,7 +102,7 @@ class GalleryAPITestCase(APITestCase):
         response = self.client.get(self.list_url)
         item = response.data['data'][0]
         self.assertEqual(set(item.keys()), {'martyr', 'description', 'image'})
-        self.assertNotIn('is_active', item)
+        self.assertNotIn('is_published', item)
 
     def test_get_gallery_list_returns_absolute_image_url(self):
         response = self.client.get(self.list_url)
@@ -164,12 +164,12 @@ class GalleryAPITestCase(APITestCase):
         self.assertEqual(paginator.page_size, GALLERY_PAGE_SIZE)
         self.assertEqual(paginator.max_page_size, 100)
 
-    def test_gallery_is_active_by_default(self):
+    def test_gallery_is_published_by_default(self):
         gallery_item = Gallery.objects.create(
             martyr=self.martyr_2,
             image=get_temp_image(name="test_gallery_default_active.png"),
         )
-        self.assertTrue(gallery_item.is_active)
+        self.assertTrue(gallery_item.is_published)
 
     def test_gallery_related_name_from_martyr(self):
         self.assertEqual(self.martyr_1.gallery.count(), 12)

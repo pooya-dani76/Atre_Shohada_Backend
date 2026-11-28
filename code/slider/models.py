@@ -1,14 +1,11 @@
 from django.db import models
-from django_jalali.db import models as jmodels
 from django.core.exceptions import ValidationError
-from utils.abstracts import OptimizedImageModel
+from utils.abstracts import WebPImageModel
+from utils.abstracts import Publishable, TimeStamped
 
 
-class SliderSetting(models.Model):
-    max_active_sliders = models.PositiveIntegerField(
-        default=10,
-        verbose_name="حداکثر اسلایدر فعال",
-    )
+class SliderSetting(TimeStamped):
+    max_active_sliders = models.PositiveIntegerField(default=10, verbose_name="حداکثر اسلایدر فعال")
     
     class Meta:
         db_table = 'Slider_Setting'
@@ -19,13 +16,10 @@ class SliderSetting(models.Model):
         return "تنظیمات اسلایدر"
 
 
-class Slider(OptimizedImageModel):
+class Slider(WebPImageModel, Publishable, TimeStamped):
     title = models.CharField("Title", max_length=100)
     image = models.ImageField(verbose_name="عکس اسلایدر", upload_to="slider_images/", null=True, blank=True)
     image_alt = models.CharField(verbose_name="Alt عکس", max_length=50, null=True, blank=True)
-    published = models.BooleanField(verbose_name="انتشار", default=False)
-    created_at = jmodels.jDateTimeField(verbose_name="ایجاد شده", auto_now=False, auto_now_add=True)
-    updated_at = jmodels.jDateTimeField(verbose_name="به روز رسانی شده", auto_now=True, auto_now_add=False)
 
     class Meta:
         db_table = 'Slider'

@@ -7,11 +7,11 @@ class SocialInfoSerializer(ModelSerializer):
     
     class Meta:
         model = SocialInfo
-        exclude = ['active', 'created_at', 'updated_at']
+        exclude = ['created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
         
         
         
 
 class SocialInfoResponseSerializer(BaseResponseSerializer):
-    data = SocialInfoSerializer(many=True)   
+    data = SocialInfoSerializer()   

@@ -1,9 +1,7 @@
 from django.db import models
 from django_jalali.db import models as jmodels
-from io import BytesIO
-from PIL import Image, ImageOps
-from django.core.files.base import ContentFile
-from utils.abstracts import OptimizedImageModel
+from utils.abstracts import WebPImageModel
+from utils.abstracts import Publishable, TimeStamped
 
 
 
@@ -31,9 +29,19 @@ class GraduationLevel(models.TextChoices):
     PHD = 'phd', 'دکترا'  
     POST_DOCTORAL = 'post_doctoral', 'فوق دکترا'
     HOZAVI = 'hozavi', 'حوزوی'
+    
+
+class MartyrCategory(models.TextChoices):
+    RAMADAN = 'ramadan', 'شهید جنگ رمضان',
+    TWELVE_DAYS = 'twelve', 'شهید دوازده روزه'
+    HOLY_DEFENSE = 'holy_defense', 'شهید دفاع مقدس'
+    SECYRITY = 'security', 'شهید امنیت'
+    AUTHORITY = 'authority', 'شهید اقتدار'
+    
+     
 
 
-class Martyr(OptimizedImageModel):
+class Martyr(WebPImageModel, Publishable, TimeStamped):
     '''Model representing a Martyr with their information, testament, biography, and narrative.'''
     
     # Martyr's personal information
@@ -47,7 +55,7 @@ class Martyr(OptimizedImageModel):
     image = models.ImageField(verbose_name="تصویر شهید", upload_to='martyr_images/', null=True, blank=True)
     cover_image = models.ImageField(verbose_name="تصویر کاوری شهید", upload_to='martyr_cover_images/', null=True, blank=True)
     identity_image = models.ImageField(verbose_name="تصویر شناسنامه شهید", upload_to='martyr_identity_images/', null=True, blank=True)
-    # identity_image_optimized = models.ImageField(upload_to="martyr_identity_images/optimized/", blank=True, null=True, editable=False)
+    category = models.CharField(verbose_name='دسته بندی', max_length=20, choices=MartyrCategory.choices, null=True, blank=True)
     
     # Martyr's dispatch information
     dispatch_type = models.CharField(verbose_name='نوع اعزام', max_length=20, choices=DispatchType.choices, null=True, blank=True)
@@ -70,9 +78,6 @@ class Martyr(OptimizedImageModel):
     testament = models.TextField(verbose_name="وصیت نامه", null=True, blank=True)
     biography = models.TextField(verbose_name="زندگینامه", null=True, blank=True)
     narrative = models.TextField(verbose_name="روایت نامه", null=True, blank=True)
-    is_active = models.BooleanField(verbose_name="فعال", default=True)
-    created_at = jmodels.jDateTimeField(verbose_name="ایجاد شده در تاریخ", auto_now_add=True)
-    updated_at = jmodels.jDateTimeField(verbose_name="به روز شده در تاریخ", auto_now=True)
 
     def __str__(self):
         '''Return the name of the Martyr for display purposes.'''

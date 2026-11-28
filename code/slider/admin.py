@@ -27,11 +27,11 @@ class SliderAdmin(admin.ModelAdmin):
     list_display = [
         "title",
         "image_preview",
-        "published",
+        "is_published",
     ]
     ordering = ['-created_at']
     readonly_fields = ("created_at","updated_at", "image_preview")
-    list_editable= ("published",)
+    list_editable= ("is_published",)
     
     
     def image_preview(self, obj):

@@ -27,7 +27,8 @@ urlpatterns = [
     path('contact-us/', include('contact_us.urls')),
     path('slider/', include('slider.urls')),
     path('social/', include('social.urls')),
-    # path('blog/', include('blog.urls')),
+    path('blogs/', include('blog.urls')),
+    path('websites/', include('websites.urls')),
     
     path('api/schema/', SecureSchemaView.as_view(), name='schema'),
     path('api/docs/', SecureSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

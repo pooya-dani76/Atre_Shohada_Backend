@@ -6,14 +6,15 @@ class BlogAdmin(admin.ModelAdmin):
     list_display = [
         'title',
         'slug',
-        'published',
+        'is_published',
     ]
-    list_filter = ['title', 'published']
+    list_editable = ['is_published']
+    list_filter = ['title', 'is_published']
     ordering = ['-created_at']
     readonly_fields = ('created_at', 'updated_at', 'slug')
 
     fields = (
         'title', 'content', 'summary',
         'image', 'image_alt', 'meta_title', 'meta_description',
-        'published', 'slug', 'created_at', 'updated_at',
+        'is_published', 'slug', 'created_at', 'updated_at',
     )
